@@ -7,7 +7,12 @@ model = YOLO('yolov8n-face.pt')
 
 def runFaceDetection(image):
     # 2. Run detection
-    results = model(image, conf=0.65, verbose=False)
+    gray_image = cv2.imread(image, 0)
+
+    # 3. Save the image as a .jpg
+    # imwrite returns True if it succeeded, False if it failed
+
+    results = model("frame.jpg", conf=0.65, verbose=False)
     savedAnything = False
 
     # 3. Process detections

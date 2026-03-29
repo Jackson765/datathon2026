@@ -7,7 +7,6 @@ import threading
 import time
 from chokeAndFallDetection import genDetection
 
-dangerThread = threading.Thread(target=inDanger)
 # Open the default camera
 # Get the default frame width and height
 # frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -16,31 +15,31 @@ dangerThread = threading.Thread(target=inDanger)
 # Define the codec and create VideoWriter object
 # fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 # out = cv2.VideoWriter('output.mp4', fourcc, 20.0, (frame_width, frame_height))
-inDanger = False
+dangerDecision = -1
 def startCam():
+    global dangerDecision
     cam = cv2.VideoCapture(0)
     while True:
-        inDanger = False
+        dangerDecision = -1
         if cam.isOpened():
             ret, frame = cam.read()
-
+            # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             cv2.imwrite("frame.jpg", frame)
 
-            genDetectVal = genDetection(frame)
-            if (genDetectVal > 0):
-                inDanger = True
+            dangerDecision = genDetection(frame)
             # Write the frame to the output file
             # out.write(frame)
             # Display the captured frame
             cv2.imshow('Camera', frame)
+            
             if (runFaceDetection("frame.jpg")):
                 detectionValue = detect("faceimage.jpg")
                 print(detectionValue)
-                if (detectionValue >= .9):
-                    print("DANGER")
-                    inDanger = True
-            if (inDanger):
-                setDanger()
+                if (detectionValue >= .75):
+                    dangerDecision = 3
+            print(dangerDecision)
+            if (dangerDecision > 0):
+                setDanger(dangerDecision)
             else:
                 setDangerToZero()
             # Press 'q' to exit the loop

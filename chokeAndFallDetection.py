@@ -17,16 +17,13 @@ except Exception as e:
 
 
 def genDetection(frame):
-    returnNum = 0
-    output_frame = frame.copy()
+    returnNum = -1
 
     # --- DETECTION 1: CHOKING ---
     # conf=0.75 keeps it strictly looking for the hand gesture, not just a face
     choking_results = choking_model.predict(source=frame, conf=0.75, device=device, verbose=False)
     
     if len(choking_results[0].boxes) > 0:
-        print("choking")
-        output_frame = choking_results[0].plot()
         returnNum = 1
 
     # --- DETECTION 2: FALLING (Stricter Aspect Ratio Logic) ---
@@ -46,5 +43,5 @@ def genDetection(frame):
                 # cv2.rectangle(output_frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 0, 255), 4)
                 # cv2.putText(output_frame, "!!! FALL DETECTED !!!", (int(x1), int(y1)-15), 
                 #             cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
-                returnNum = 3
+                returnNum = 2
     return returnNum

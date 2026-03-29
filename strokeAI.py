@@ -17,3 +17,7 @@ def detect(imgDirectory):
     # img_array = img_array / 255.0
 
     return model.predict(img_array, verbose=0)[0][0]
+
+# print(detect("imageFolder/1.png"))
+# print(detect("imageFolder/2.png"))
+# print(detect("imageFolder/3.png"))
