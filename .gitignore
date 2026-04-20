@@ -2,9 +2,9 @@
 venv
 aitrainer
 .env
-__pycache__
 normalFaceTesting.png
 frame.jpg
 faceimage.jpg
 imageFolder
 runs
+.gitignore
